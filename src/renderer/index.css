@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cismu-skeleton {
+  grid-template-areas:
+    "left-sidebar main-view right-sidebar"
+    "music-playing-bar music-playing-bar music-playing-bar";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+.skeleton-left-sidebar {
+  grid-area: left-sidebar;
+}
+
+.skeleton-main-view {
+  grid-area: main-view;
+}
+
+.skeleton-right-sidebar {
+  grid-area: right-sidebar;
+}
+
+.skeleton-music-playing-bar {
+  grid-area: music-playing-bar;
+}
+
+.bg-gradient-dark {
+  background: rgb(94, 94, 121);
+  background: linear-gradient(145deg, rgba(94, 94, 121, 1) 0%, rgba(54, 54, 69, 1) 100%);
+}

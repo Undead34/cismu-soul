@@ -1,0 +1,141 @@
+{
+  "gid": "1809faad2b824d73873017613afe5917",
+  "name": "Moonlight",
+  "album": {
+    "gid": "bf4dbfb1404b493484eca6784b25640d",
+    "name": "Red Moon In Venus",
+    "artist": [
+      {
+        "gid": "3e8b66fa6d2146c2925f69b005804aca",
+        "name": "Kali Uchis"
+      }
+    ],
+    "label": "Geffen Records",
+    "date": {
+      "year": 2023,
+      "month": 3,
+      "day": 3
+    },
+    "cover_group": {
+      "image": [
+        {
+          "file_id": "ab67616d00001e0281fccd758776d16b87721b17",
+          "size": "DEFAULT",
+          "width": 300,
+          "height": 300
+        },
+        {
+          "file_id": "ab67616d0000485181fccd758776d16b87721b17",
+          "size": "SMALL",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "file_id": "ab67616d0000b27381fccd758776d16b87721b17",
+          "size": "LARGE",
+          "width": 640,
+          "height": 640
+        }
+      ]
+    },
+    "licensor": {
+      "uuid": "fe358ea987e2424d9021c2665a0667b7"
+    },
+    "prerelease_config": {
+      "earliest_reveal_date": {
+        "year": 2023,
+        "month": 3,
+        "day": 2,
+        "hour": 11
+      },
+      "earliest_coverart_reveal_date": {
+        "year": 2023,
+        "month": 3,
+        "day": 2,
+        "hour": 11
+      }
+    }
+  },
+  "artist": [
+    {
+      "gid": "3e8b66fa6d2146c2925f69b005804aca",
+      "name": "Kali Uchis"
+    }
+  ],
+  "number": 14,
+  "disc_number": 1,
+  "duration": 187723,
+  "popularity": 86,
+  "external_id": [
+    {
+      "type": "isrc",
+      "id": "USUM72219486"
+    }
+  ],
+  "file": [
+    {
+      "file_id": "e48398e19187be1c1d4c7efe8ab2062662d2e92e",
+      "format": "OGG_VORBIS_320"
+    },
+    {
+      "file_id": "bc6e23ec1fa0c57add57642fa61f637a7623b34e",
+      "format": "OGG_VORBIS_160"
+    },
+    {
+      "file_id": "e5d60db1c5737d86aa247ffb88ad6fc2591dfd6d",
+      "format": "OGG_VORBIS_96"
+    },
+    {
+      "file_id": "4aeb2b989c38a4c4c1eb76818e9493343f2f0056",
+      "format": "MP4_256_DUAL"
+    },
+    {
+      "file_id": "c2aec11cc85cd9be15e08a5b9166f0db00ea5cda",
+      "format": "MP4_256"
+    },
+    {
+      "file_id": "f14d911caa61f261041d96480d8131d39ff8bdc6",
+      "format": "MP4_128_DUAL"
+    },
+    {
+      "file_id": "6b369831bd21795c81149537ed8786482dad53f3",
+      "format": "MP4_128"
+    },
+    {
+      "file_id": "f3b94e6b824de1affb5aac17e9b4b92404d210ea",
+      "format": "AAC_24"
+    }
+  ],
+  "preview": [
+    {
+      "file_id": "786606c3207fabbeb2a80f17d87570e58d3d8e1f",
+      "format": "MP3_96"
+    }
+  ],
+  "earliest_live_timestamp": 1677754800,
+  "has_lyrics": true,
+  "licensor": {
+    "uuid": "fe358ea987e2424d9021c2665a0667b7"
+  },
+  "language_of_performance": ["en"],
+  "original_audio": {
+    "uuid": "d1407346cf284708a44f3d989cdaa5fe"
+  },
+  "original_title": "Moonlight",
+  "artist_with_role": [
+    {
+      "artist_gid": "3e8b66fa6d2146c2925f69b005804aca",
+      "artist_name": "Kali Uchis",
+      "role": "ARTIST_ROLE_MAIN_ARTIST"
+    }
+  ],
+  "canonical_uri": "spotify:track:0JmnkIqdlnUzPaf8sqBRs3",
+  "prerelease_config": {
+    "earliest_reveal_date": {
+      "year": 2023,
+      "month": 3,
+      "day": 2,
+      "hour": 11
+    }
+  }
+}
