@@ -128,3 +128,16 @@ export class CismuOperatingSystemNotSupported extends CismuError {
     this.name = name;
   }
 }
+
+export class CismuInvalidConfig extends CismuError {
+  description: string;
+
+  constructor(name = "CISMU_IN/COCfGF") {
+    const message = "Invalid/corrupted configuration file";
+    super(message);
+    this.description = `\
+    An invalid configuration file was detected, the default configuration will be used,
+    if this keeps occurring it is a very serious bug and must be fixed, please notify the developer.`;
+    this.name = name;
+  }
+}

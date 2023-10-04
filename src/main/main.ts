@@ -28,7 +28,7 @@ if (require("electron-squirrel-startup")) {
  */
 const createWindow = () => {
   config.validate();
-  const { bounds } = config.config;
+  const bounds = config.get("bounds");
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -49,6 +49,16 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
+
+  function saveWindowsState() {
+    console.log(mainWindow.getBounds())
+    config.set("bounds", mainWindow.getBounds())
+    config.save();
+  }
+
+  mainWindow.on("moved", saveWindowsState);
+  mainWindow.on("resized", saveWindowsState);
+  mainWindow.on("maximize", saveWindowsState);
 
   mainWindow.webContents.openDevTools();
 };

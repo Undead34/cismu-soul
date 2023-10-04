@@ -6,13 +6,15 @@ import fs from "../fs";
 //Types
 import { IConfig } from "src/shared/types/shared";
 import { JTDParser, SchemaObject } from "ajv/dist/jtd";
+
+import { CismuInvalidConfig } from "../errors";
 import { getSchema } from "./schema";
 import { paths } from "../constants";
 import { cloneDeep } from "../utils";
 
 class Config {
   // Public:
-  validateSchema: JTDParser;
+  parserSchema: JTDParser<IConfig>;
   serializeSchema: (schema: SchemaObject) => string;
 
   // Private:
@@ -27,7 +29,7 @@ class Config {
     this.jtd = new Jtd();
     const schema = getSchema();
 
-    this.validateSchema = this.jtd.compileParser<typeof schema>(schema);
+    this.parserSchema = this.jtd.compileParser<IConfig>(schema);
     this.serializeSchema = this.jtd.compileSerializer<typeof schema>(schema);
 
     this.defaultCfg = {
@@ -46,8 +48,8 @@ class Config {
       bounds: {
         x: 0,
         y: 0,
-        width: 0,
-        height: 0,
+        width: 1024,
+        height: 768,
       },
       startup: {
         auto_startup: true,
@@ -74,6 +76,7 @@ class Config {
 
   async init() {
     logger.log("Initialization of the Config module has been successfully completed");
+    this.lastModified = this._getLastModified();
 
     try {
       const data: Buffer = await new Promise((resolve, reject) => {
@@ -86,10 +89,16 @@ class Config {
       const config = data.toString("utf-8");
 
       try {
-        this.validateSchema(config);
+        const cfgParsed = this.parserSchema(config);
+
+        if (!cfgParsed) throw new CismuInvalidConfig();
+        else {
+          this.cfg = cfgParsed;
+        }
       } catch (error) {
         logger.error(error);
         this.cfg = cloneDeep(this.defaultCfg);
+        this.save();
       }
 
       this.save();
@@ -105,10 +114,11 @@ class Config {
         logger.warn("Not saving settings, it has been externally modified.");
         return;
       }
-      // Save the configuration
-      const data = JSON.stringify(this.cfg, null, 2);
 
+      const data = this.serializeSchema(this.cfg);
       fs.atomicWriteSync(this.cfgPath, data, 0o777);
+
+      this.lastModified = this._getLastModified();
     } catch (error) {
       logger.error("An error occurred while saving the configuration", error);
     }
@@ -134,8 +144,14 @@ class Config {
   }
 
   has() {}
-  reset() {}
+
+  reset<Key extends keyof IConfig>(key: Key): void {
+    this.cfg[key] = this.defaultCfg[key];
+    this.save();
+  }
+
   delete() {}
+
   clear() {}
 
   get config(): IConfig {
@@ -147,7 +163,6 @@ class Config {
       if (bounds === undefined) {
         bounds = cloneDeep(this.defaultCfg.bounds);
       }
-
       // check if the browser window is offscreen
       const display = screen.getDisplayNearestPoint({
         x: Math.round(bounds.x),
@@ -159,8 +174,6 @@ class Config {
         bounds.x + bounds.width <= display.x + display.width &&
         bounds.y >= display.y &&
         bounds.y + bounds.height <= display.y + display.height;
-
-      console.log(onScreen);
 
       if (!onScreen) {
         return {
@@ -174,7 +187,6 @@ class Config {
       return bounds;
     } catch (error) {
       logger.error(error);
-      throw error;
     }
   }
 

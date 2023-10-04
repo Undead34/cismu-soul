@@ -30,6 +30,11 @@ function bootstrap({ config, ipcMain }: { config: Config; ipcMain: IpcMain }) {
           await config.init();
           await ipcMain.init();
 
+          if (!app.isReady() && !config.get("hardware_acceleration")) {
+            app.disableHardwareAcceleration();
+            logger.warn("Hardware acceleration has been disabled, for more information check https://support.cismu.org/hardware-acceleration");
+          }
+
           await resolve(true);
         } catch (error) {
           await abort(error);
@@ -39,14 +44,24 @@ function bootstrap({ config, ipcMain }: { config: Config; ipcMain: IpcMain }) {
           await testing();
 
           await config.init();
+          
+          console.log(config.get("hardware_acceleration"))
+          console.log(app.isReady())
+
+          if (!app.isReady() && !config.get("hardware_acceleration")) {
+            app.disableHardwareAcceleration();
+            logger.warn("Hardware acceleration has been disabled, for more information check https://support.cismu.org/hardware-acceleration");
+          }
+
           await ipcMain.init();
+
 
           resolve(true);
         } catch (error) {
           await app.whenReady();
 
           let detail = "An error occurred when starting the application, do you want to try a repair?";
-          let message = "Unknown error at startup";
+          let message = error.message ?? "Unknown error at startup";
           let title = "Unknown Error";
 
           if (error instanceof CismuError) {

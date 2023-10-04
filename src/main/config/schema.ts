@@ -18,7 +18,6 @@ const Windows = {
     hardware_acceleration: { type: "boolean" },
     language: { type: "string" },
     developer_mode: { type: "boolean" },
-    state: { type: "string" },
     bounds: {
       properties: {
         x: { type: "int32" },
