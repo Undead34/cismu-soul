@@ -1,4 +1,6 @@
 import { ipcMain, IpcMainEvent } from "electron";
+import logger from "../logger";
+import colors from "colors";
 
 interface IpcMainEventObject {
   name: string;
@@ -10,23 +12,51 @@ interface IpcMainEventObject {
 
 class IpcMain {
   events: IpcMainEventObject[];
+
   constructor() {
-    this.events = [];
+    logger.log("Instantiating IpcMain module");
+
+    this.events = [
+      {
+        name: "test",
+        channel: "test",
+        handled: false,
+        once: false,
+        action: (event: IpcMainEvent, ...argv: any[]) => {
+          console.log("test");
+        },
+      },
+    ];
   }
 
-  init() {
+  async init() {
+    logger.log("Registering Events...");
+
     for (let x = 0; x < this.events.length; x++) {
+      const initTime = new Date().getTime();
       const event = this.events[x];
 
       if (event.handled) {
-        const register = event.once ? ipcMain.handleOnce : ipcMain.handle;
-        register(event.channel, event.action);
+        if (event.once) {
+          ipcMain.handleOnce(event.channel, event.action);
+        } else {
+          ipcMain.handle(event.channel, event.action);
+        }
       } else {
-        const register = event.once ? ipcMain.once : ipcMain.on;
-        register(event.channel, event.action);
+        if (event.once) {
+          ipcMain.once(event.channel, event.action);
+        } else {
+          ipcMain.on(event.channel, event.action);
+        }
       }
 
-      console.log(`Event ${event.name} was successfully registered`);
+      const endTime = (new Date().getTime() - initTime) / 1000;
+
+      logger.log(`${colors.blue(event.name)} successfully registered ${colors.grey(`${endTime}ms`)}`);
     }
+
+    logger.log("Initialization of the IpcMain module has been successfully completed");
   }
 }
+
+export default IpcMain;

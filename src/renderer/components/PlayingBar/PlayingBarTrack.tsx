@@ -55,7 +55,7 @@ export default function PlayingBarTrack() {
       <div className="flex gap-2">
         <img
           draggable={false}
-          className="select-none"
+          className="select-none rounded-sm"
           width={52}
           height={52}
           src="https://i.scdn.co/image/ab67616d0000485181fccd758776d16b87721b17"

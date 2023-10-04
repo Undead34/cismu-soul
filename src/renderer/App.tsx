@@ -25,9 +25,9 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div className="skeleton-right-sidebar w-58 rounded-lg bg-[#23232d] p-2 text-base text-white">
+        {/* <div className="skeleton-right-sidebar w-58 rounded-lg bg-[#23232d] p-2 text-base text-white">
           right-sidebar
-        </div>
+        </div> */}
         <PlayingBar />
       </div>
     </div>
@@ -45,15 +45,15 @@ function Login() {
 function Plugins() {
   const [plugins, setPlugins] = useState([]);
 
-  if (plugins.length === 0) {
-    window.api.emit("plugins");
-  }
+  // if (plugins.length === 0) {
+  //   window.api.emit("plugins");
+  // }
 
-  window.api.once("plugins", async (event, plugins) => {
-    const plugin = await import("C:\\Users\\Undead34\\Documents\\Undead34\\cismu-plugin\\index.js");
-    const PluginComponent = await plugin.default;
-    setPlugins([<PluginComponent key={uuid()} />]);
-  });
+  // window.api.once("plugins", async (event, plugins) => {
+  //   const plugin = await import("C:\\Users\\Undead34\\Documents\\Undead34\\cismu-plugin\\index.js");
+  //   const PluginComponent = await plugin.default;
+  //   setPlugins([<PluginComponent key={uuid()} />]);
+  // });
 
   return (
     <Routes>

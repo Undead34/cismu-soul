@@ -1,13 +1,10 @@
-// import ffmpeg from "fluent-ffmpeg";
+import ffmpeg from "fluent-ffmpeg";
 
-// const ffmpegBin = "C:\\Users\\Undead34\\Documents\\Undead34\\Cismu\\src\\shared\\libs\\bins\\ffmpeg.exe";
-// const ffprobeBin = "C:\\Users\\Undead34\\Documents\\Undead34\\Cismu\\src\\shared\\libs\\bins\\ffprobe.exe";
+const ffmpegBin = "C:\\Users\\gmaizo\\Documents\\cismu\\cismu-desktop\\src\\shared\\bins\\ffmpeg.exe";
+const ffprobeBin = "C:\\Users\\gmaizo\\Documents\\cismu\\cismu-desktop\\src\\shared\\bins\\ffprobe.exe";
 
-// console.log(ffmpegBin);
-// console.log(ffprobeBin);
-
-// ffmpeg.setFfmpegPath(ffmpegBin);
-// ffmpeg.setFfprobePath(ffprobeBin);
+ffmpeg.setFfmpegPath(ffmpegBin);
+ffmpeg.setFfprobePath(ffprobeBin);
 
 // async function run() {
 //   const command = ffmpeg("C:\\Users\\Undead34\\Music\\MV LUVORATORRRRRY ver Reolれをる featnqrse.mp3");

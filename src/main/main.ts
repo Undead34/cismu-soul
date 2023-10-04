@@ -1,11 +1,18 @@
 import { app, BrowserWindow } from "electron";
-import Plugins from "./plugins";
 import path from "path";
 
-const plugins = new Plugins();
-plugins.load();
+// polyfills
+import "./polyfills/crypto";
 
-if (process.env.NODE_ENV === "development") {
+import { CismuError, CismuStartupError } from "./errors";
+import bootstrap from "./bootstrap";
+import IpcMain from "./ipcMain";
+import Config from "./config";
+import logger from "./logger";
+
+const isDevelopment = process.env.NODE_ENV === "development";
+
+if (isDevelopment) {
   process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 }
 
@@ -14,17 +21,25 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+/**
+ * Creates a new browser window and loads the index.html of the app.
+ *
+ * @return {void}
+ */
 const createWindow = () => {
+  config.validate();
+  const { bounds } = config.config;
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     minWidth: 1024,
     minHeight: 768,
-    width: 1024,
-    height: 768,
+    width: bounds.width,
+    height: bounds.height,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       autoplayPolicy: "no-user-gesture-required",
-      webSecurity: false,
+      webSecurity: !isDevelopment,
     },
   });
 
@@ -35,18 +50,9 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
@@ -54,9 +60,29 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
+
+// Instance the internal modules, the objective is only create a reference to the object, not to do anything in the module.
+const config = new Config(); // Configuration module, manages all configurations.
+const ipcMain = new IpcMain(); // This module manages the events to communicate the renderer and main process
+
+bootstrap({ config, ipcMain })
+  .then(async () => {
+    logger.log("Application started successfully, all modules were loaded successfully");
+    if (app.isReady()) createWindow();
+    else app.once("ready", createWindow);
+  })
+  .catch((error) => {
+    logger.error("An error occurred at application startup");
+
+    if (error instanceof CismuError) {
+      logger.crit(error);
+    } else {
+      logger.crit(new CismuStartupError(error));
+    }
+
+    app.exit(1);
+  });
