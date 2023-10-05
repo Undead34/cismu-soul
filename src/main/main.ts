@@ -10,6 +10,13 @@ import IpcMain from "./ipcMain";
 import Config from "./config";
 import logger from "./logger";
 
+if (process.argv.includes("--disable-hardware-acceleration")) {
+  app.disableHardwareAcceleration();
+  logger.warn(
+    "Hardware acceleration has been disabled, for more information check https://support.cismu.org/hardware-acceleration",
+  );
+}
+
 const isDevelopment = process.env.NODE_ENV === "development";
 
 if (isDevelopment) {
@@ -36,6 +43,8 @@ const createWindow = () => {
     minHeight: 768,
     width: bounds.width,
     height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       autoplayPolicy: "no-user-gesture-required",
@@ -51,8 +60,8 @@ const createWindow = () => {
   }
 
   function saveWindowsState() {
-    console.log(mainWindow.getBounds())
-    config.set("bounds", mainWindow.getBounds())
+    console.log(mainWindow.getBounds());
+    config.set("bounds", mainWindow.getBounds());
     config.save();
   }
 

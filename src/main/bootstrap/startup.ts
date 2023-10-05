@@ -87,6 +87,8 @@ export async function testing(): Promise<boolean> {
       throw new CismuAccessError();
     }
 
+    // Mucho Tiempo
+
     if (process.platform === "win32") {
       for (let i = 0; i < allFiles.length; i++) {
         const { permission } = await fs.getPermissions(allFiles[i]);

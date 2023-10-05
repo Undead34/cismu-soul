@@ -30,9 +30,11 @@ function bootstrap({ config, ipcMain }: { config: Config; ipcMain: IpcMain }) {
           await config.init();
           await ipcMain.init();
 
-          if (!app.isReady() && !config.get("hardware_acceleration")) {
-            app.disableHardwareAcceleration();
-            logger.warn("Hardware acceleration has been disabled, for more information check https://support.cismu.org/hardware-acceleration");
+          if (
+            !process.argv.includes("--disable-hardware-acceleration") &&
+            !config.get("hardware_acceleration")
+          ) {
+            reboot({ addArgs: ["--disable-hardware-acceleration"] });
           }
 
           await resolve(true);
@@ -42,19 +44,15 @@ function bootstrap({ config, ipcMain }: { config: Config; ipcMain: IpcMain }) {
       } else {
         try {
           await testing();
-
           await config.init();
-          
-          console.log(config.get("hardware_acceleration"))
-          console.log(app.isReady())
-
-          if (!app.isReady() && !config.get("hardware_acceleration")) {
-            app.disableHardwareAcceleration();
-            logger.warn("Hardware acceleration has been disabled, for more information check https://support.cismu.org/hardware-acceleration");
-          }
-
           await ipcMain.init();
 
+          if (
+            !process.argv.includes("--disable-hardware-acceleration") &&
+            !config.get("hardware_acceleration")
+          ) {
+            reboot({ addArgs: ["--disable-hardware-acceleration"] });
+          }
 
           resolve(true);
         } catch (error) {
